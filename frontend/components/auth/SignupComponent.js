@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { UI_context } from '../../context/UI/context.ui'
+
 import { useFormik } from 'formik'
 
 import * as Yup from 'yup'
@@ -22,29 +24,26 @@ const validationSchema = Yup.object({
 })
 
 const SignupComponent = () => {
-	const [status, setStatus] = useState({
-		loading: false,
-		error: false,
-		message: '',
-	})
+	const { dispatch } = useContext(UI_context)
+
+	const [loading, setLoading] = useState(false)
 
 	function handleSubmit(user, actions) {
-		setStatus({ ...status, loading: true })
+		setLoading(true)
 
 		signup(user).then((data) => {
+			setLoading(false)
 			if (data.error) {
-				setStatus((status) => ({
-					loading: false,
-					error: true,
-					message: data.error,
-				}))
+				dispatch({
+					type: 'snackbar_on',
+					payload: { color: 'warning', message: data.error, timeout: 5000 },
+				})
 				actions.resetForm()
 			} else {
-				setStatus((status) => ({
-					loading: false,
-					error: false,
-					message: data.message,
-				}))
+				dispatch({
+					type: 'snackbar_on',
+					payload: { color: 'success', message: data.message, link: data.link },
+				})
 			}
 		})
 	}
@@ -72,14 +71,7 @@ const SignupComponent = () => {
 		],
 	}
 
-	return (
-		<div>
-			<Alert toggle={status.message} isWarning={status.error}>
-				{status.message}
-			</Alert>
-			{generateForm(formConfig, formik, status)}
-		</div>
-	)
+	return <div>{generateForm(formConfig, formik, loading)}</div>
 }
 
 export default SignupComponent
