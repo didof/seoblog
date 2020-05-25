@@ -11,7 +11,6 @@ exports.signup = (req, res) => {
 			return res.status(500).json({
 				error:
 					'Something went wrong during the signup. Please try again in 5 minutes. If problem persists please <a href="/sticazzi">contact the amministrator</a>',
-				err,
 			})
 		}
 
@@ -28,8 +27,7 @@ exports.signup = (req, res) => {
 			if (err) {
 				return res.status(500).json({
 					error:
-						'Something went wrong during the signup. Please try again in 5 minutes. If problem persists please <a href="/sticazzi">contact the amministrator</a>',
-					err,
+						'Something went wrong during the signup. Please try again in 5 minutes. If problem persists please <a href="/sticazzi">contact the amministrator</a>'
 				})
 			}
 
@@ -48,8 +46,7 @@ exports.signin = (req, res) => {
 		if (err) {
 			return res.status(500).json({
 				error:
-					'Something went wrong during the signup. Please try again in 5 minutes. If problem persists please <a href="/sticazzi">contact the amministrator</a>',
-				err,
+					'Something went wrong during the signup. Please try again in 5 minutes. If problem persists please <a href="/sticazzi">contact the amministrator</a>'
 			})
 		}
 		if (!user) {
