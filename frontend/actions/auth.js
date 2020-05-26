@@ -101,7 +101,7 @@ export const isAuth = () => {
 	if (cookieChecked) {
 		let userChecked = localStorage.getItem('user')
 		if (userChecked) {
-			return userChecked
+			return JSON.parse(userChecked)
 		} else {
 			return false
 		}

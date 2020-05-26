@@ -4,7 +4,8 @@ import { useState, useContext } from 'react'
 import { UI_context } from '../context/UI/context.ui'
 
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { Router, useRouter } from 'next/router'
+import CustomLink from './reusables/Link'
 
 import { signout, isAuth } from '../actions/auth'
 
@@ -19,19 +20,18 @@ import {
 	NavbarText,
 } from 'reactstrap'
 
-import CustomLink from './reusables/Link'
-
 const Header = (props) => {
 	const { dispatch } = useContext(UI_context)
 
 	const router = useRouter()
-	const isAuthenticated = isAuth()
+
+	const user = isAuth()
 
 	const [isOpen, setIsOpen] = useState(false)
 
 	const toggle = () => setIsOpen(!isOpen)
 
-	const linksIn = [
+	const guestLinks = [
 		{ href: '/signin', label: 'Signin' },
 		{ href: '/signup', label: 'Signup' },
 	].map(({ href, label }, index) => (
@@ -40,53 +40,63 @@ const Header = (props) => {
 		</NavItem>
 	))
 
-	const linksOut = (
-		<NavItem>
-			<NavLink
-				onClick={() => {
-					signout(() => {}).then((data) => {
-						if (data.error) {
-							dispatch({
-								type: 'snackbar_on',
-								payload: { color: 'warning', message: data.error, timeout: 5000 },
-							})
-						} else {
-							dispatch({
-								type: 'snackbar_on',
-								payload: {
-									color: 'success',
-									message: data.message,
-									link: data.link,
-									timeout: 3000,
-								},
-							})
-						}
-						router.replace('/signin')
-					})
-				}}
-			>
-				Signout
-			</NavLink>
-		</NavItem>
+	const userLinks = (
+		<React.Fragment>
+			{user && (
+				<NavItem>
+					<Link href={user.role === 1 ? '/admin' : '/user'}>
+						<NavLink>{user.name}'s dashboard</NavLink>
+					</Link>
+				</NavItem>
+			)}
+			<NavItem>
+				<NavLink
+					onClick={() => {
+						signout(() => {}).then((data) => {
+							if (data.error) {
+								dispatch({
+									type: 'snackbar_on',
+									payload: { color: 'warning', message: data.error, timeout: 5000 },
+								})
+							} else {
+								dispatch({
+									type: 'snackbar_on',
+									payload: {
+										color: 'success',
+										message: data.message,
+										link: data.link,
+										timeout: 3000,
+									},
+								})
+							}
+							router.replace('/signin')
+						})
+					}}
+				>
+					Signout
+				</NavLink>
+			</NavItem>
+		</React.Fragment>
 	)
 
 	return (
 		<div>
 			<Navbar color='light' light expand='md'>
 				<NavbarBrand>
-					<Link href='/' >
+					<Link href='/'>
 						<span style={{ cursor: 'pointer' }}>{APP_NAME}</span>
 					</Link>
 				</NavbarBrand>
 				<NavbarToggler onClick={toggle} />
 				<Collapse isOpen={isOpen} navbar>
 					<Nav className='mr-auto' navbar>
-						{isAuthenticated ? linksOut : linksIn}
 						<NavItem>
 							<NavLink href='https://github.com/didof'>GitHub</NavLink>
 						</NavItem>
 					</Nav>
-					<NavbarText>Simple Text</NavbarText>
+					<Nav className='ml-auto' navbar>
+						{user ? userLinks : guestLinks}
+					</Nav>
 				</Collapse>
 			</Navbar>
 		</div>

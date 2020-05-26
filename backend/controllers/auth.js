@@ -9,8 +9,7 @@ exports.signup = (req, res) => {
 	User.findOne({ email }).exec((err, user) => {
 		if (err) {
 			return res.status(500).json({
-				error:
-					'Something went wrong during the signup. Please try again in 5 minutes. If problem persists please <a href="/sticazzi">contact the amministrator</a>',
+				error: defaultServerError,
 			})
 		}
 
@@ -26,8 +25,7 @@ exports.signup = (req, res) => {
 		newUser.save((err, userSaved) => {
 			if (err) {
 				return res.status(500).json({
-					error:
-						'Something went wrong during the signup. Please try again in 5 minutes. If problem persists please <a href="/sticazzi">contact the amministrator</a>'
+					error: defaultServerError,
 				})
 			}
 
@@ -45,8 +43,7 @@ exports.signin = (req, res) => {
 	User.findOne({ email }).exec((err, user) => {
 		if (err) {
 			return res.status(500).json({
-				error:
-					'Something went wrong during the signup. Please try again in 5 minutes. If problem persists please <a href="/sticazzi">contact the amministrator</a>'
+				error: defaultServerError,
 			})
 		}
 		if (!user) {
@@ -74,14 +71,14 @@ exports.signin = (req, res) => {
 		return res.json({
 			token,
 			user: { _id, username, name, email, role },
-			message: 'Sign in successfull'
+			message: 'Sign in successfull',
 		})
 	})
 }
 
 exports.signout = (req, res) => {
 	res.clearCookie('token')
-	res.json({
+	return res.status(200).json({
 		message: 'Sign out success',
 	})
 }
@@ -89,3 +86,58 @@ exports.signout = (req, res) => {
 exports.isAuthenticated = expressJwt({
 	secret: process.env.JWT_SECRET,
 })
+
+exports.authMiddleware = (req, res, next) => {
+	const { _id } = req.user
+
+	User.findById({ _id })
+		.select('-hashed_password -__v -salt')
+		.exec((err, user) => {
+			if (err) {
+				return res.status(500).json({
+					error: defaultServerError,
+				})
+			}
+
+			if (!user) {
+				return res.status(404).json({
+					error: 'User not found',
+				})
+			}
+
+			req.profile = user
+			next()
+		})
+}
+
+exports.adminMiddleware = (req, res, next) => {
+	const { _id } = req.user
+
+	User.findById({ _id })
+		.select('-hashed_password -__v -salt')
+		.exec((err, user) => {
+			if (err) {
+				return res.status(500).json({
+					error: defaultServerError,
+				})
+			}
+
+			if (!user) {
+				return res.status(404).json({
+					error: 'User not found',
+				})
+			}
+
+			if (user.role !== 1) {
+				return res.status(401).json({
+					error: 'Resource private. Access denied',
+				})
+			}
+
+			req.profile = user
+			next()
+		})
+}
+
+const defaultServerError =
+	'Something went wrong during the signup. Please try again in 5 minutes. If problem persists please <a href="/sticazzi">contact the amministrator</a>'
