@@ -1,25 +1,20 @@
 import { useState, useEffect, useContext } from 'react'
-import { UI_context } from '../../context/UI/context.ui'
-
-import { useFormik } from 'formik'
-
-import * as Yup from 'yup'
-
 import { useRouter } from 'next/router'
-import { signup, isAuth } from '../../actions/auth'
+import { UI_context } from '../../context/UI/context.ui'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+import { signin, authenticate, isAuth } from '../../actions/auth'
 
 import generateForm from '../../utils/form/generateForm'
 
 import Alert from '../reusables/Alert'
 
 const initialValues = {
-	name: '',
 	email: '',
 	password: '',
 }
 
 const validationSchema = Yup.object({
-	name: Yup.string().required('Required'),
 	email: Yup.string().email('Invalid e-mail format').required('Required'),
 	password: Yup.string().required('Required'),
 })
@@ -32,13 +27,13 @@ const SignupComponent = () => {
 	const [loading, setLoading] = useState(false)
 
 	useEffect(() => {
-		isAuth() && router.replace('/')
+		isAuth() && router.push('/')
 	}, [])
 
 	function handleSubmit(user, actions) {
 		setLoading(true)
 
-		signup(user).then((data) => {
+		signin(user).then((data) => {
 			setLoading(false)
 			if (data.error) {
 				dispatch({
@@ -49,7 +44,16 @@ const SignupComponent = () => {
 			} else {
 				dispatch({
 					type: 'snackbar_on',
-					payload: { color: 'success', message: data.message, link: data.link },
+					payload: {
+						color: 'success',
+						message: data.message,
+						link: data.link,
+						timeout: 3000,
+					},
+				})
+
+				authenticate(data, () => {
+					router.push(data.user.role === 1 ? '/admin' : '/user')
 				})
 			}
 		})
@@ -63,16 +67,13 @@ const SignupComponent = () => {
 
 	const formConfig = {
 		fields: [
-			[{ id: 'name' }, { id: 'email', type: 'email' }],
-			{
-				id: 'password',
-				type: 'password',
-			},
+			{ id: 'email', type: 'email' },
+			{ id: 'password', type: 'password' },
 		],
 		actions: [
 			{
 				type: 'submit',
-				label: 'enter',
+				label: 'join',
 				color: 'primary',
 			},
 		],

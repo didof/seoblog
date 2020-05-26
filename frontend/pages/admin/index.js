@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 
-const WelcomePage = () => {
+const AdminIndex = () => {
 
 	return (
 		<div>
-			Welcome Page
+			Admin Dashboard
 		</div>
 	)
 }
 
-export default WelcomePage
+export default AdminIndex

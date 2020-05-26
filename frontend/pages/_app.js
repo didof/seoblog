@@ -6,11 +6,11 @@ import UI_contextProvider from '../context/UI/context.ui'
 
 export default function App({ Component, pageProps }) {
 	return (
-		<Layout>
-			<UI_contextProvider>
+		<UI_contextProvider>
+			<Layout>
 				<Component {...pageProps} />
 				<Snackbar />
-			</UI_contextProvider>
-		</Layout>
+			</Layout>
+		</UI_contextProvider>
 	)
 }
