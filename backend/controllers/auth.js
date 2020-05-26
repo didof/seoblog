@@ -32,7 +32,7 @@ exports.signup = (req, res) => {
 			}
 
 			return res.status(201).json({
-				message: 'Signup success, please signin',
+				message: 'Sign up success, please sign in',
 			})
 		})
 	})
@@ -74,6 +74,7 @@ exports.signin = (req, res) => {
 		return res.json({
 			token,
 			user: { _id, username, name, email, role },
+			message: 'Sign in successfull'
 		})
 	})
 }
@@ -81,7 +82,7 @@ exports.signin = (req, res) => {
 exports.signout = (req, res) => {
 	res.clearCookie('token')
 	res.json({
-		message: 'Signout success',
+		message: 'Sign out success',
 	})
 }
 
