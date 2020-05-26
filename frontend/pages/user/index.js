@@ -1,34 +1,13 @@
-import React, { useState } from 'react'
+import React from 'react'
 
-const data = {
-   properties: [
-      {
-         _id: '1',
-         index: 0,
-         price: 200000,
-         city: 'Milano'
-      },
-      {
-         _id: '2',
-         index: 0,
-         price: 100000,
-         city: 'Roma'
-      },
-      {
-         _id: '3',
-         index: 0,
-         price: 300000,
-         city: 'Bari'
-      },
-   ]
-}
+import AuthGuard from '../../components/auth/AuthGuard'
 
 const UserIndex = () => {
 
 	return (
-		<div>
+		<AuthGuard>
          User Dashboard
-		</div>
+		</AuthGuard>
 	)
 }
 

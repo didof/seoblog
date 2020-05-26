@@ -1,13 +1,13 @@
-const Category = require('../models/category')
+const Tag = require('../models/tag')
 const slugify = require('slugify')
 
 exports.create = (req, res) => {
 	const { name } = req.body
 	const slug = slugify(name).toLowerCase()
 
-	const category = new Category({ name, slug })
+	const tag = new Tag({ name, slug })
 
-	category.save((err, data) => {
+	tag.save((err, data) => {
 		if (err || !data) {
 			return res.status(500).json({
 				error: 'This name is not avaiable, please pick another one',
@@ -15,14 +15,14 @@ exports.create = (req, res) => {
 		}
 
 		return res.status(200).json({
-			message: 'New category saved',
+			message: 'New tag saved',
 			data,
 		})
 	})
 }
 
 exports.getAll = (req, res) => {
-	Category.find()
+	Tag.find()
 		.select('-__v')
 		.exec((err, data) => {
 			if (err || !data) {
@@ -38,7 +38,7 @@ exports.getAll = (req, res) => {
 exports.getOne = (req, res) => {
 	const { slug } = req.params
 
-	Category.findOne({ slug })
+	Tag.findOne({ slug })
 		.select('-__v')
 		.exec((err, data) => {
 			if (err || !data) {
@@ -55,7 +55,7 @@ exports.getOne = (req, res) => {
 exports.removeOne = (req, res) => {
 	const { slug } = req.params
 
-	Category.findOneAndRemove({ slug })
+	Tag.findOneAndRemove({ slug })
 		.select('-__v')
 		.exec((err, data) => {
 			if (err || !data) {
@@ -65,10 +65,10 @@ exports.removeOne = (req, res) => {
 			}
 
 			return res.status(200).json({
-				message: 'Category deleted successfully',
+				message: 'Tag deleted successfully',
 			})
 		})
 }
 
 const defaultServerError =
-	'Something went wrong during the retrieving of resource [CATEGORY]. Please try again in 5 minutes. If problem persists please <a href="/sticazzi">contact the amministrator</a>'
+	'Something went wrong during the retrieving of resource [TAG]. Please try again in 5 minutes. If problem persists please <a href="/sticazzi">contact the amministrator</a>'

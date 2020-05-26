@@ -8,6 +8,7 @@ import Layout from '../components/Layout'
 import Snackbar from '../components/reusables/Snackbar'
 
 import NProgress from 'nprogress'
+NProgress.configure({ showSpinner: false })
 
 Router.onRouteChangeStart = () => {
 	console.log('onRouteChangeStart triggered')

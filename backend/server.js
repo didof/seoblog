@@ -47,7 +47,8 @@ if (process.env.NODE_ENV === 'development') {
 app.use('/api/blog', require('./routes/blog'))
 app.use('/api/auth', require('./routes/auth'))
 app.use('/api/profile', require('./routes/user'))
-app.use('/api/category', require('./routes/category'))
+app.use('/api/categories', require('./routes/categories'))
+app.use('/api/tags', require('./routes/tags'))
 
 // Port
 const port = process.env.PORT || 8000

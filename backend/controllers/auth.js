@@ -140,4 +140,4 @@ exports.adminMiddleware = (req, res, next) => {
 }
 
 const defaultServerError =
-	'Something went wrong during the signup. Please try again in 5 minutes. If problem persists please <a href="/sticazzi">contact the amministrator</a>'
+	'Something went wrong during the authorization process. Please try again in 5 minutes. If problem persists please <a href="/sticazzi">contact the amministrator</a>'

@@ -5,15 +5,19 @@ const { runValidation } = require('../validators')
 const { categoryCreateValidator } = require('../validators/category')
 const { isAuthenticated, adminMiddleware } = require('../controllers/auth')
 
-const { create } = require('../controllers/category')
+const { create, getAll, getOne, removeOne } = require('../controllers/category')
 
 router.post(
 	'/create',
 	categoryCreateValidator,
 	runValidation,
-   isAuthenticated,
+	isAuthenticated,
 	adminMiddleware,
-   create
+	create
 )
+
+router.get('/', getAll)
+router.get('/:slug', getOne)
+router.delete('/:slug', isAuthenticated, adminMiddleware, removeOne)
 
 module.exports = router
