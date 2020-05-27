@@ -1,31 +1,50 @@
-import React from 'react'
-import fetch from 'isomorphic-unfetch'
+import React, { useState, useEffect, useContext } from 'react'
 import { API } from '../../../config'
+
+import { UI_context } from '../../../context/UI/context.ui'
 
 import AdminGuard from '../../../components/auth/AdminGuard'
 
-const Feature = ({ feature, list }) => {
+import Cockpit from '../../../components/crud/Cockpit'
+import List from '../../../components/crud/List'
+
+const Feature = ({ feature }) => {
+	const {
+		state: { reload },
+		dispatch,
+	} = useContext(UI_context)
+
+	const [list, setList] = useState([])
+
+	async function updatedList() {
+		const response = await fetch(`${API}/api/${feature}/`)
+		const formatted = await response.json()
+		setList(formatted)
+	}
+
+	useEffect(() => {
+		updatedList()
+	}, [])
+	useEffect(() => {
+		reload && updatedList()
+		dispatch({ type: 'reload_off' })
+	}, [reload])
+
 	return (
 		<AdminGuard>
 			<div className='container'>
+				<i className='far fa-trash-alt'></i>
 				<div className='row'>
 					<div className='col-md-12 mb-8'>
-						<h1 className='display-5'>Manage {feature}</h1>
+						<h1 className='display-5'>Manage {feature} </h1>
 					</div>
 				</div>
 				<div className='row'>
-					<div className="col-md-8">CRUD Cockpit</div>
+					<div className='col-md-8'>
+						<Cockpit feature={feature} />
+					</div>
 					<div className='col-md-4'>
-						<div className='list-group list-group-flush'>
-							{list.map((el) => (
-								<button
-									key={`list-group-item-${feature}-${el._id}`}
-									className='list-group-item list-group-item-action'
-								>
-									{el.name}
-								</button>
-							))}
-						</div>
+						<List list={list} feature={feature} />
 					</div>
 				</div>
 			</div>
@@ -36,10 +55,10 @@ const Feature = ({ feature, list }) => {
 Feature.getInitialProps = async (ctx) => {
 	const { feature } = ctx.query
 
-	let list = await fetch(`${API}/api/${feature}/`)
-	list = await list.json()
+	// let list = await fetch(`${API}/api/${feature}/`)
+	// list = await list.json()
 
-	return { feature, list }
+	return { feature }
 }
 
 export default Feature

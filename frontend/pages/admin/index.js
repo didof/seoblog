@@ -11,9 +11,8 @@ const AdminIndex = () => {
 			{ id: 2, label: 'Manage', url: '/categories' },
 		],
 		tag: [
-			{ id: 1, label: 'Get all', url: '/category-tag' },
-			{ id: 2, label: 'Create', url: '/category-tag' },
-			{ id: 3, label: 'Delete', url: '/category-tag' },
+			{ id: 1, label: 'Get all', url: '/blog/tags', prefix: false },
+			{ id: 2, label: 'Manage', url: '/tags' },
 		],
 	}
 

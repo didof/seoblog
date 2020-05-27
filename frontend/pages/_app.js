@@ -1,7 +1,5 @@
 import Router from 'next/router'
 
-import '../static/css/nprogress.css'
-
 import UI_contextProvider from '../context/UI/context.ui'
 
 import Layout from '../components/Layout'
@@ -11,17 +9,14 @@ import NProgress from 'nprogress'
 NProgress.configure({ showSpinner: false })
 
 Router.onRouteChangeStart = () => {
-	console.log('onRouteChangeStart triggered')
 	NProgress.start()
 }
 
 Router.onRouteChangeComplete = () => {
-	console.log('onRouteChangeComplete triggered')
 	NProgress.done()
 }
 
 Router.onRouteChangeError = () => {
-	console.log('onRouteChangeError triggered')
 	NProgress.done()
 }
 

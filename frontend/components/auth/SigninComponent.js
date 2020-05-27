@@ -31,13 +31,12 @@ const SignupComponent = () => {
 	}, [])
 
 	function handleSubmit(user, actions) {
+		
 		setLoading(true)
 
 		signin(user).then((data) => {
-			console.log(data)
 			setLoading(false)
 			if (data.error) {
-				console.log(data)
 				dispatch({
 					type: 'snackbar_on',
 					payload: { color: 'warning', message: data.error, timeout: 5000 },
