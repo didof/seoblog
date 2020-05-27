@@ -33,8 +33,8 @@ export function remove(slug, token, feature) {
 		.catch((err) => console.error(err))
 }
 
-export function getAll() {
-	return fetch(`${API}/api/categories/`, {
+export function getAll(feature) {
+	return fetch(`${API}/api/${feature}/`, {
 		method: 'GET',
 		headers: {
 			Accept: 'application/json',
@@ -47,8 +47,8 @@ export function getAll() {
 		.catch((err) => console.error(err))
 }
 
-export function getOne(slug) {
-	return fetch(`${API}/api/categories/${slug}`, {
+export function getOne(slug, feature) {
+	return fetch(`${API}/api/${feature}/${slug}`, {
 		method: 'GET',
 		headers: {
 			Accept: 'application/json',

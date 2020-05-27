@@ -4,7 +4,7 @@ import { useState, useContext } from 'react'
 import { UI_context } from '../context/UI/context.ui'
 
 import Link from 'next/link'
-import { Router, useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import CustomLink from './reusables/Link'
 
 import { signout, isAuth } from '../actions/auth'
@@ -40,15 +40,17 @@ const Header = (props) => {
 		</NavItem>
 	))
 
+	const userBtn = isBroser() ? (
+		<NavItem>
+			<Link href={user.role === 1 ? '/admin' : '/user'}>
+				<NavLink>{user.name}'s dashboard</NavLink>
+			</Link>
+		</NavItem>
+	) : null
+
 	const userLinks = (
 		<React.Fragment>
-			{user && (
-				<NavItem>
-					<Link href={user.role === 1 ? '/admin' : '/user'}>
-						<NavLink>{user.name}'s dashboard</NavLink>
-					</Link>
-				</NavItem>
-			)}
+			{isBroser() && user && userBtn}
 			<NavItem>
 				<NavLink
 					onClick={() => {
@@ -95,7 +97,7 @@ const Header = (props) => {
 						</NavItem>
 					</Nav>
 					<Nav className='ml-auto' navbar>
-						{user ? userLinks : guestLinks}
+						{isBroser() && user ? userLinks : guestLinks}
 					</Nav>
 				</Collapse>
 			</Navbar>
@@ -104,3 +106,7 @@ const Header = (props) => {
 }
 
 export default Header
+
+function isBroser() {
+	return typeof window !== 'undefined'
+}

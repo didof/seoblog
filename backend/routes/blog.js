@@ -1,8 +1,16 @@
 const express = require('express')
 const router = express.Router()
 
-const { time } = require('../controllers/blog')
+const { create, getAll } = require('../controllers/blog')
 
-router.get('/', time)
+const { isAuthenticated, adminMiddleware } = require('../controllers/auth')
+
+
+
+router.get('/', getAll)
+// router.get('/:slug', getAll)
+// router.delete('/:slug', getAll)
+
+router.post('/create', isAuthenticated, adminMiddleware, create)
 
 module.exports = router

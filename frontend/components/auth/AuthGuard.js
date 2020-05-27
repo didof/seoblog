@@ -4,7 +4,6 @@ import { useRouter } from 'next/router'
 import { isAuth } from '../../actions/auth'
 
 function AuthGuard({ children }) {
-   console.log('private')
 
    const router = useRouter()
 

@@ -1,6 +1,7 @@
 import Router from 'next/router'
 
 import UI_contextProvider from '../context/UI/context.ui'
+import Blog_contextProvider from '../context/blog/context.blog'
 
 import Layout from '../components/Layout'
 import Snackbar from '../components/reusables/Snackbar'
@@ -24,7 +25,9 @@ export default function App({ Component, pageProps }) {
 	return (
 		<UI_contextProvider>
 			<Layout>
-				<Component {...pageProps} />
+				<Blog_contextProvider>
+					<Component {...pageProps} />
+				</Blog_contextProvider>
 				<Snackbar />
 			</Layout>
 		</UI_contextProvider>

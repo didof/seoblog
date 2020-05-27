@@ -8,6 +8,8 @@ import AdminGuard from '../../../components/auth/AdminGuard'
 import Cockpit from '../../../components/crud/Cockpit'
 import List from '../../../components/crud/List'
 
+import { getAll } from '../../../actions/category-tag'
+
 const Feature = ({ feature }) => {
 	const {
 		state: { reload },
@@ -17,8 +19,17 @@ const Feature = ({ feature }) => {
 	const [list, setList] = useState([])
 
 	async function updatedList() {
-		const response = await fetch(`${API}/api/${feature}/`)
-		const formatted = await response.json()
+		const formatted = await getAll(feature)
+		if (feature === 'blog') {
+			const preview = formatted.map((el) => ({
+				_id: el._id,
+				name: el.title,
+				slug: el.slug,
+			}))
+			setList(preview)
+			return
+		}
+
 		setList(formatted)
 	}
 

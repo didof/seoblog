@@ -15,6 +15,7 @@ class CustomDocument extends Document {
 						href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'
 					/>
 					<link rel='stylesheet' type='text/css' href='/static/css/nprogress.css' />
+					<link rel='stylesheet' type='text/css' href='/static/css/quill.snow.css' />
 				</Head>
 				<body>
 					<Main></Main>
