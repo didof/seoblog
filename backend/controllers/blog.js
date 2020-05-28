@@ -23,6 +23,7 @@ exports.create = (req, res) => {
 		}
 
 		const { title, body, categories, tags } = fields
+		console.log(categories)
 
 		if (!title || title.length === 0) {
 			return res.status(400).json({
@@ -55,8 +56,8 @@ exports.create = (req, res) => {
 			excerpt: smartTrim(body, 320, '', '...'),
 			mtitle: `${title} | ${process.env.APP_NAME}`,
 			mdesc: stripHtml(body.substring(0, 160)),
-			categories: categories.split(':'),
-			tags: tags.split(':'),
+			categories: categories.split(','),
+			tags: tags.split(','),
 			author: req.user._id,
 		})
 
